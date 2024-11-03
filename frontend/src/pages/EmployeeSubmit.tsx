@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { ALEC_LOGO, SMART_LOGO, Q1_LINK, Q2_LINK } from "@/constants";
+import { HMR_LOGO, Q1_LINK, Q2_LINK } from "@/constants";
+// import { ALEC_LOGO, SMART_LOGO, Q1_LINK, Q2_LINK } from "@/constants";
 import { Slider } from "@/components/ui/slider"
 import {
   Popover,
@@ -36,21 +37,31 @@ const EmployeeSubmit = () => {
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-2xl mx-auto bg-white p-6 shadow-lg rounded">
         <div className="flex justify-center mb-6">
-          <img src={ALEC_LOGO} alt="Logo 1" className="h-12 mr-4" />
-          <img src={SMART_LOGO} alt="Logo 2" className="h-12" />
+          {/* <img src={ALEC_LOGO} alt="Logo 1" className="h-12 mr-4" />
+          <img src={SMART_LOGO} alt="Logo 2" className="h-12" /> */}
+          <img src={HMR_LOGO} alt="HMR Logo" className="h-12" />
         </div>
         <h1 className="text-2xl font-bold mb-4">Submit Your Response</h1>
         <h2 className="text-l font-semibold mb-4">
-          ALEC is planning to implement an IoT-connected heavy equipment for future projects. Keeping that in mind, please answer the following questions.
+        Following are the questions for the “Hack my Robot” Challenge, part of CSAW MENA. Please answer them considering the provided robotic system representing an autonomous excavator. 
         </h2>
+        {/* <h2 className="text-l font-semibold mb-4">
+          ALEC is planning to implement an IoT-connected heavy equipment for future projects. Keeping that in mind, please answer the following questions.
+        </h2> */}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block font-bold mb-1">
-              Considering the IoT connected heavy equipment presented in &nbsp;
+              Considering the robotic system presented in &nbsp;
               <a href={Q1_LINK} className="text-blue-500 underline">
               this document
               </a>, what would you do to compromise the data collected?
             </label>
+            {/* <label className="block font-bold mb-1">
+              Considering the IoT connected heavy equipment presented in &nbsp;
+              <a href={Q1_LINK} className="text-blue-500 underline">
+              this document
+              </a>, what would you do to compromise the data collected?
+            </label> */}
             <textarea
               className="w-full p-2 border border-gray-300 rounded"
               value={questions.q1}
@@ -60,11 +71,17 @@ const EmployeeSubmit = () => {
           </div>
           <div className="mb-4">
             <label className="block font-bold mb-1">
-              Considering the IoT connected heavy equipment presented in &nbsp;
+              Considering the robotic system presented in &nbsp;
               <a href={Q2_LINK} className="text-blue-500 underline">
               this document
               </a>, what would you do to compromise the operation?
             </label>
+            {/* <label className="block font-bold mb-1">
+              Considering the IoT connected heavy equipment presented in &nbsp;
+              <a href={Q2_LINK} className="text-blue-500 underline">
+              this document
+              </a>, what would you do to compromise the operation?
+            </label> */}
             <textarea
               className="w-full p-2 border border-gray-300 rounded"
               value={questions.q2}
@@ -83,6 +100,15 @@ const EmployeeSubmit = () => {
           </div>
           <div className="mb-4">
             <label className="block font-bold mb-1"> What modifications would you suggest to make the system less vulnerable?</label>
+            <textarea
+              className="w-full p-2 border border-gray-300 rounded"
+              value={questions.q4}
+              onChange={(e) => setQuestions({ ...questions, q4: e.target.value })}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block font-bold mb-1"> What would be your motivation to compromise the described robotic system? Consider the characteristics of the environment where the robot operates and the potential impacts of such compromise on the business processes/continuity.</label>
             <textarea
               className="w-full p-2 border border-gray-300 rounded"
               value={questions.q4}

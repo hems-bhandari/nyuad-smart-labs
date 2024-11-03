@@ -6,3 +6,6 @@ export const Q1_LINK = "https://docs.google.com/document/d/1qv2k-0fWF21d9cNtYnls
 
 export const ACCESS_TOKEN = "access";
 export const REFRESH_TOKEN = "refresh"
+
+export const HMR_LOGO = "/HMR.PNG";
+

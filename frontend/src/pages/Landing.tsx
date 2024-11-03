@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { ALEC_LOGO, SMART_LOGO } from "@/constants";
+// import { ALEC_LOGO, SMART_LOGO } from "@/constants";
+import { HMR_LOGO } from "@/constants";
 
 const Landing = () => {
   return (
@@ -7,7 +8,7 @@ const Landing = () => {
       <header className="w-full bg-white shadow-md py-4">
         <div className="container mx-auto flex justify-between items-center px-6">
           <div className="flex space-x-4">
-            <img
+            {/* <img
               src={ALEC_LOGO}
               alt="ALEC Logo"
               className="h-12 w-auto"
@@ -15,6 +16,11 @@ const Landing = () => {
             <img
               src={SMART_LOGO}
               alt="SMART Logo"
+              className="h-12 w-auto"
+            /> */}
+            <img 
+              src={HMR_LOGO}
+              alt="HMR logo"
               className="h-12 w-auto"
             />
           </div>
@@ -33,7 +39,7 @@ const Landing = () => {
           Welcome to Crowdsourcing Platform
         </h1>
         <p className="text-gray-600 text-lg mb-8">
-          Join us today and take control of your projects with our IoT-connected solutions.
+          Together, let's make construction more secure!
         </p>
 
         <div className="flex space-x-4">

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Chart } from "chart.js/auto";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ALEC_LOGO, SMART_LOGO } from "@/constants";
+import { HMR_LOGO } from "@/constants";
+// import { ALEC_LOGO, SMART_LOGO } from "@/constants";
 import Summaries from "@/components/Summaries";
 
 export default function ManagerDashboard() {
@@ -136,8 +137,9 @@ export default function ManagerDashboard() {
           </TabsList>
           <TabsContent value="analytics">
             <div className="flex justify-center mb-6">
-              <img src={ALEC_LOGO} alt="Logo 1" className="h-12 mr-4" />
-              <img src={SMART_LOGO} alt="Logo 2" className="h-12" />
+              {/* <img src={ALEC_LOGO} alt="Logo 1" className="h-12 mr-4" />
+              <img src={SMART_LOGO} alt="Logo 2" className="h-12" /> */}
+              <img src={HMR_LOGO} alt="Logo 2" className="h-12" />
             </div>
             <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
             <p className="mb-4">Number of contributors: 20</p>
@@ -183,8 +185,9 @@ export default function ManagerDashboard() {
           </TabsContent>
           <TabsContent value="summaries">
             <div className="flex justify-center mb-6">
-              <img src={ALEC_LOGO} alt="Logo 1" className="h-12 mr-4" />
-              <img src={SMART_LOGO} alt="Logo 2" className="h-12" />
+              {/* <img src={ALEC_LOGO} alt="Logo 1" className="h-12 mr-4" />
+              <img src={SMART_LOGO} alt="Logo 2" className="h-12" /> */}
+              <img src={HMR_LOGO} alt="Logo 2" className="h-12" />
             </div>
             <Summaries />
           </TabsContent>
