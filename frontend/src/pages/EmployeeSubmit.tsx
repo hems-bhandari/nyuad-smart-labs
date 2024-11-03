@@ -21,7 +21,6 @@ const EmployeeSubmit = () => {
     e.preventDefault();
     console.log("Submitting form", questions);
     try {
-      // send the form data to the backend
       const response = await api.post("/api/submissions/", {
         a1: questions.q1,
         a2: questions.q2,
@@ -35,6 +34,9 @@ const EmployeeSubmit = () => {
         console.log("Form Submitted", questions);
         setQuestions({ q1: "", q2: "", q3: "", q4: "", q5: "", q6: "1" });
         setShowPopup(true);
+
+        // Trigger topic modeling process
+        await api.get("/api/topic-modeling/");
       }
     } catch (error) {
       console.error("Error submitting form", error);
