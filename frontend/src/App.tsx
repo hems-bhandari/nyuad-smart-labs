@@ -59,11 +59,3 @@ function App() {
 }
 
 export default App
-
-
-{/*   
-  1. change the content/logos [Submit a Response for Hack Ny Robot]
-  2. load csv files to database
-  3. implement models
-  4. 
-*/}

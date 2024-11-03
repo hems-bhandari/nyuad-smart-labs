@@ -3,7 +3,7 @@ import { HMR_LOGO, Q1_LINK, Q2_LINK } from "@/constants";
 import { Slider } from "@/components/ui/slider";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import "../styles/EmployeeSubmit.css";
-import api from "@/api"; // Import the api module
+import api from "@/api";
 
 const EmployeeSubmit = () => {
   const [questions, setQuestions] = useState({
