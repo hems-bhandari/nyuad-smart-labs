@@ -28,6 +28,14 @@ class SubmissionDelete(generics.DestroyAPIView):
         return Submission.objects.filter(employee=user)
 
 
+class SubmissionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = SubmissionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Submission.objects.filter(employee=self.request.user)
+
+
 class CreateEmployeeView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = EmployeeSerializer

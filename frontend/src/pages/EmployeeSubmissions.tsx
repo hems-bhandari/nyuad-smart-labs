@@ -1,92 +1,92 @@
-import { useState } from "react";
-import { ALEC_LOGO, SMART_LOGO } from "@/constants";
+import { useState, useEffect } from "react";
+import { HMR_LOGO } from "@/constants";
+// import { ALEC_LOGO, SMART_LOGO } from "@/constants";
+import api from "@/api"; // Import the api module
 
 interface Submission {
   id: number;
-  questions: {
-    q1: string;
-    q2: string;
-    q3: string;
-    q4: string;
-  };
-  submittedAt: Date;
-  lastEditedAt: Date | null;
+  a1: string;
+  a2: string;
+  a3: string;
+  a4: string;
+  a5: string;
+  a6: string;
+  created_at: string;
+  lastEditedAt: string | null;
 }
 
 const EmployeeSubmissions = () => {
-  // sample submission data
-  const [submissions, setSubmissions] = useState<Submission[]>([
-    {
-      id: 1,
-      questions: {
-        q1: "Answer to Q1 in submission 1",
-        q2: "Answer to Q2 in submission 1",
-        q3: "Answer to Q3 in submission 1",
-        q4: "Answer to Q4 in submission 1",
-      },
-      submittedAt: new Date("2024-10-12T10:45:00"),
-      lastEditedAt: new Date("2024-10-13T11:15:00"),
-    },
-    {
-      id: 2,
-      questions: {
-        q1: "Answer to Q1 in submission 2",
-        q2: "Answer to Q2 in submission 2",
-        q3: "Answer to Q3 in submission 2",
-        q4: "Answer to Q4 in submission 2",
-      },
-      submittedAt: new Date("2024-10-10T09:30:00"),
-      lastEditedAt: null,
-    },
-  ]);
-
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [newAnswers, setNewAnswers] = useState({
-    q1: "",
-    q2: "",
-    q3: "",
-    q4: "",
+    a1: "",
+    a2: "",
+    a3: "",
+    a4: "",
+    a5: "",
+    a6: "",
   });
 
-  // delete submission
-  const handleDelete = (id: number) => {
-    const updatedSubmissions = submissions.filter(
-      (submission) => submission.id !== id
-    );
-    setSubmissions(updatedSubmissions);
+  useEffect(() => {
+    // Fetch submissions from the backend
+    const fetchSubmissions = async () => {
+      try {
+        const response = await api.get("/api/submissions/");
+        setSubmissions(response.data);
+      } catch (error) {
+        console.error("Error fetching submissions", error);
+      }
+    };
+
+    fetchSubmissions();
+  }, []);
+
+  // Delete submission
+  const handleDelete = async (id: number) => {
+    try {
+      await api.delete(`/api/submissions/${id}/`);
+      setSubmissions(submissions.filter((submission) => submission.id !== id));
+    } catch (error) {
+      console.error("Error deleting submission", error);
+    }
   };
 
-  // edit submission
+  // Edit submission
   const handleEdit = (id: number) => {
     setEditingId(id);
     const submissionToEdit = submissions.find((submission) => submission.id === id);
     if (submissionToEdit) {
-      setNewAnswers(submissionToEdit.questions);
+      setNewAnswers({
+        a1: submissionToEdit.a1,
+        a2: submissionToEdit.a2,
+        a3: submissionToEdit.a3,
+        a4: submissionToEdit.a4,
+        a5: submissionToEdit.a5,
+        a6: submissionToEdit.a6,
+      });
     }
+    console.log("Editing submission", submissionToEdit);
   };
 
-  // save edited submission
-  const handleSave = (id: number) => {
-    const updatedSubmissions = submissions.map((submission) => {
-      if (submission.id === id) {
-        return {
-          ...submission,
-          questions: newAnswers,
-          lastEditedAt: new Date(), // update edit timestamp
-        };
-      }
-      return submission;
-    });
-    setSubmissions(updatedSubmissions);
-    setEditingId(null);
+  // Save edited submission
+  const handleSave = async (id: number) => {
+    try {
+      const response = await api.put(`/api/submissions/${id}/`, newAnswers);
+      const updatedSubmission = response.data;
+      setSubmissions(submissions.map((submission) => (submission.id === id ? updatedSubmission : submission)));
+      setEditingId(null);
+    } catch (error) {
+      console.error("Error saving submission", error);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto bg-white p-8 shadow-lg rounded">
-      <div className="flex justify-center mb-6">
-          <img src={ALEC_LOGO} alt="Logo 1" className="h-12 mr-4" />
-          <img src={SMART_LOGO} alt="Logo 2" className="h-12" />
+        <div className="flex justify-center mb-6">
+          {/* <img src={ALEC_LOGO} alt="Logo 1" className="h-12 mr-4" />
+          <img src={SMART_LOGO} alt="Logo 2" className="h-12" /> */}
+          <img src={HMR_LOGO} alt="Logo 2" className="h-12" />
         </div>
         <h1 className="text-2xl font-bold mb-6">Your Submissions</h1>
 
@@ -95,13 +95,8 @@ const EmployeeSubmissions = () => {
         ) : (
           <div className="space-y-6">
             {submissions.map((submission) => (
-              <div
-                key={submission.id}
-                className="bg-gray-50 p-4 rounded-lg shadow-md"
-              >
-                <h2 className="text-lg font-semibold mb-2">
-                  Submission {submission.id}
-                </h2>
+              <div key={submission.id} className="bg-gray-50 p-4 rounded-lg shadow-md">
+                <h2 className="text-lg font-semibold mb-2">Submission {submission.id}</h2>
 
                 {/* Submission questions */}
                 <div className="space-y-2">
@@ -110,13 +105,11 @@ const EmployeeSubmissions = () => {
                     {editingId === submission.id ? (
                       <textarea
                         className="w-full p-2 border border-gray-300 rounded mb-2"
-                        value={newAnswers.q1}
-                        onChange={(e) =>
-                          setNewAnswers({ ...newAnswers, q1: e.target.value })
-                        }
+                        value={newAnswers.a1}
+                        onChange={(e) => setNewAnswers({ ...newAnswers, a1: e.target.value })}
                       />
                     ) : (
-                      <p className="text-gray-800">{submission.questions.q1}</p>
+                      <p className="text-gray-800">{submission.a1}</p>
                     )}
                   </div>
 
@@ -125,13 +118,11 @@ const EmployeeSubmissions = () => {
                     {editingId === submission.id ? (
                       <textarea
                         className="w-full p-2 border border-gray-300 rounded mb-2"
-                        value={newAnswers.q2}
-                        onChange={(e) =>
-                          setNewAnswers({ ...newAnswers, q2: e.target.value })
-                        }
+                        value={newAnswers.a2}
+                        onChange={(e) => setNewAnswers({ ...newAnswers, a2: e.target.value })}
                       />
                     ) : (
-                      <p className="text-gray-800">{submission.questions.q2}</p>
+                      <p className="text-gray-800">{submission.a2}</p>
                     )}
                   </div>
 
@@ -140,13 +131,11 @@ const EmployeeSubmissions = () => {
                     {editingId === submission.id ? (
                       <textarea
                         className="w-full p-2 border border-gray-300 rounded mb-2"
-                        value={newAnswers.q3}
-                        onChange={(e) =>
-                          setNewAnswers({ ...newAnswers, q3: e.target.value })
-                        }
+                        value={newAnswers.a3}
+                        onChange={(e) => setNewAnswers({ ...newAnswers, a3: e.target.value })}
                       />
                     ) : (
-                      <p className="text-gray-800">{submission.questions.q3}</p>
+                      <p className="text-gray-800">{submission.a3}</p>
                     )}
                   </div>
 
@@ -155,13 +144,37 @@ const EmployeeSubmissions = () => {
                     {editingId === submission.id ? (
                       <textarea
                         className="w-full p-2 border border-gray-300 rounded mb-2"
-                        value={newAnswers.q4}
-                        onChange={(e) =>
-                          setNewAnswers({ ...newAnswers, q4: e.target.value })
-                        }
+                        value={newAnswers.a4}
+                        onChange={(e) => setNewAnswers({ ...newAnswers, a4: e.target.value })}
                       />
                     ) : (
-                      <p className="text-gray-800">{submission.questions.q4}</p>
+                      <p className="text-gray-800">{submission.a4}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="font-bold">Q5:</label>
+                    {editingId === submission.id ? (
+                      <textarea
+                        className="w-full p-2 border border-gray-300 rounded mb-2"
+                        value={newAnswers.a5}
+                        onChange={(e) => setNewAnswers({ ...newAnswers, a5: e.target.value })}
+                      />
+                    ) : (
+                      <p className="text-gray-800">{submission.a5}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="font-bold">Q6:</label>
+                    {editingId === submission.id ? (
+                      <textarea
+                        className="w-full p-2 border border-gray-300 rounded mb-2"
+                        value={newAnswers.a6}
+                        onChange={(e) => setNewAnswers({ ...newAnswers, a6: e.target.value })}
+                      />
+                    ) : (
+                      <p className="text-gray-800">{submission.a6}</p>
                     )}
                   </div>
                 </div>
@@ -169,7 +182,7 @@ const EmployeeSubmissions = () => {
                 {/* Submission timestamps */}
                 <p className="text-sm text-gray-500 mt-4">
                   Submitted on:{" "}
-                  {submission.submittedAt.toLocaleString("en-US", {
+                  {new Date(submission.created_at).toLocaleString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
@@ -180,7 +193,7 @@ const EmployeeSubmissions = () => {
                 {submission.lastEditedAt && (
                   <p className="text-sm text-gray-500">
                     Last edited on:{" "}
-                    {submission.lastEditedAt.toLocaleString("en-US", {
+                    {new Date(submission.lastEditedAt).toLocaleString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",

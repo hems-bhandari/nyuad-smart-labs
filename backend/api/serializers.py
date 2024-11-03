@@ -19,5 +19,5 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
-        fields = ["id", "a1", "a2", "a3", "a4", "a5", "created_at", "employee"]
-        extra_kwargs = {"employee": {"read_only": True}}
+        fields = ['id', 'a1', 'a2', 'a3', 'a4', 'a5', 'created_at']
+        read_only_fields = ['id', 'created_at', 'employee']
