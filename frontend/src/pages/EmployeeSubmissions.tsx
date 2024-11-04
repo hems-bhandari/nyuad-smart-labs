@@ -28,7 +28,6 @@ const EmployeeSubmissions = () => {
   });
 
   useEffect(() => {
-    // Fetch submissions from the backend
     const fetchSubmissions = async () => {
       try {
         const response = await api.get("/api/submissions/");
@@ -41,7 +40,6 @@ const EmployeeSubmissions = () => {
     fetchSubmissions();
   }, []);
 
-  // Delete submission
   const handleDelete = async (id: number) => {
     try {
       await api.delete(`/api/submissions/${id}/`);
@@ -51,7 +49,6 @@ const EmployeeSubmissions = () => {
     }
   };
 
-  // Edit submission
   const handleEdit = (id: number) => {
     setEditingId(id);
     const submissionToEdit = submissions.find((submission) => submission.id === id);
@@ -68,7 +65,6 @@ const EmployeeSubmissions = () => {
     console.log("Editing submission", submissionToEdit);
   };
 
-  // Save edited submission
   const handleSave = async (id: number) => {
     try {
       const response = await api.put(`/api/submissions/${id}/`, newAnswers);
@@ -221,12 +217,16 @@ const EmployeeSubmissions = () => {
                     </button>
                   )}
 
-                  <button
-                    onClick={() => handleDelete(submission.id)}
+                    <button
+                    onClick={() => {
+                      if (window.confirm("Are you sure you want to delete this submission?")) {
+                      handleDelete(submission.id);
+                      }
+                    }}
                     className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                  >
+                    >
                     Delete
-                  </button>
+                    </button>
                 </div>
               </div>
             ))}

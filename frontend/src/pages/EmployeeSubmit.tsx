@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { HMR_LOGO, Q1_LINK, Q2_LINK } from "@/constants";
 import { Slider } from "@/components/ui/slider";
+import { useNavigate } from "react-router-dom";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import "../styles/EmployeeSubmit.css";
+import "@/styles/EmployeeSubmit.css";
 import api from "@/api";
+import { WordCloudComponent } from '@/components/WordCloud';
 
 const EmployeeSubmit = () => {
   const [questions, setQuestions] = useState({
@@ -16,12 +18,14 @@ const EmployeeSubmit = () => {
   });
 
   const [showPopup, setShowPopup] = useState(false);
+  const [words, setWords] = useState<{ text: string; value: number }[]>([]);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Submitting form", questions);
     try {
-      // send the form data to the backend
       const response = await api.post("/api/submissions/", {
         a1: questions.q1,
         a2: questions.q2,
@@ -33,6 +37,31 @@ const EmployeeSubmit = () => {
 
       if (response.status === 201) {
         console.log("Form Submitted", questions);
+
+        const answers = [
+          questions.q1,
+          questions.q2,
+          questions.q3,
+          questions.q4,
+          questions.q5,
+        ].filter(answer => answer.trim() !== "");
+
+        const concatenatedAnswers = answers.join(' ');
+
+        const wordCounts = concatenatedAnswers
+          .split(/\s+/)
+          .reduce((acc: { [key: string]: number }, word: string) => {
+            if (word.trim() !== "") {
+              acc[word] = (acc[word] || 0) + 1;
+            }
+            return acc;
+          }, {});
+
+        const wordsArray = Object.entries(wordCounts).map(([text, value]) => ({ text, value }));
+
+        console.log("Words data:", wordsArray);
+        setWords(wordsArray);
+
         setQuestions({ q1: "", q2: "", q3: "", q4: "", q5: "", q6: "1" });
         setShowPopup(true);
       }
@@ -43,6 +72,7 @@ const EmployeeSubmit = () => {
 
   const handleClosePopup = () => {
     setShowPopup(false);
+    navigate('/employee/dashboard/');
   };
 
   return (
@@ -159,6 +189,7 @@ const EmployeeSubmit = () => {
           <div className="popup-content">
             <span className="close-button" onClick={handleClosePopup}>&times;</span>
             <p>Your response was recorded!</p>
+            <WordCloudComponent words={words} />
           </div>
         </div>
       )}

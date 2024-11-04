@@ -85,8 +85,8 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "smart_lab_db",
-        "USER": "hems",
+        "NAME": "smart_labs",
+        "USER": "root",
         "PASSWORD": "root",
         "HOST": "localhost",
         "PORT": "3306",
