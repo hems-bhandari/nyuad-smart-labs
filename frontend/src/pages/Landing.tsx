@@ -36,7 +36,7 @@ const Landing = () => {
 
       <main className="flex flex-col items-center justify-center flex-1 text-center py-16 px-4">
         <h1 className="text-4xl font-bold mb-6 text-gray-800">
-          Welcome to Crowdsourcing Platform
+          Welcome to the Crowdsourcing Platform
         </h1>
         <p className="text-gray-600 text-lg mb-8">
           Together, let's make construction more secure!
