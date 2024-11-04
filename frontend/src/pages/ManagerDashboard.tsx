@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Chart } from "chart.js/auto";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HMR_LOGO } from "@/constants";
-// import { ALEC_LOGO, SMART_LOGO } from "@/constants";
+import api from "@/api"; // Import the api module
 import Summaries from "@/components/Summaries";
 
 export default function ManagerDashboard() {
@@ -15,6 +15,11 @@ export default function ManagerDashboard() {
   const topicWordScoresChartRef = useRef<Chart | null>(null);
 
   const [activeTab, setActiveTab] = useState("analytics");
+  interface ModelOutput {
+    topic: string;
+  }
+
+  const [modelOutputs, setModelOutputs] = useState<ModelOutput[]>([]);
 
   const initializeCharts = () => {
     // dummy data for Response Rates chart
@@ -127,6 +132,20 @@ export default function ManagerDashboard() {
     };
   }, [activeTab]);
 
+  useEffect(() => {
+    // Fetch model outputs from the backend
+    const fetchModelOutputs = async () => {
+      try {
+        const response = await api.get("/api/model-outputs/");
+        setModelOutputs(response.data);
+      } catch (error) {
+        console.error("Error fetching model outputs", error);
+      }
+    };
+
+    fetchModelOutputs();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-6xl mx-auto bg-white p-8 shadow-lg rounded">
@@ -137,11 +156,17 @@ export default function ManagerDashboard() {
           </TabsList>
           <TabsContent value="analytics">
             <div className="flex justify-center mb-6">
-              {/* <img src={ALEC_LOGO} alt="Logo 1" className="h-12 mr-4" />
-              <img src={SMART_LOGO} alt="Logo 2" className="h-12" /> */}
-              <img src={HMR_LOGO} alt="Logo 2" className="h-12" />
+              <img src={HMR_LOGO} alt="Logo" className="h-12" />
             </div>
             <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+            <div className="space-y-4">
+              {modelOutputs.map((output, index) => (
+                <div key={index} className="bg-gray-50 p-4 rounded-lg shadow-md">
+                  <h2 className="text-lg font-semibold">Topic {index + 1}</h2>
+                  <p>{output.topic}</p>
+                </div>
+              ))}
+            </div>
             <p className="mb-4">Number of contributors: 20</p>
             <p className="mb-4">Questions:</p>
             <ul className="list-disc list-inside mb-4">
@@ -185,8 +210,6 @@ export default function ManagerDashboard() {
           </TabsContent>
           <TabsContent value="summaries">
             <div className="flex justify-center mb-6">
-              {/* <img src={ALEC_LOGO} alt="Logo 1" className="h-12 mr-4" />
-              <img src={SMART_LOGO} alt="Logo 2" className="h-12" /> */}
               <img src={HMR_LOGO} alt="Logo 2" className="h-12" />
             </div>
             <Summaries />
