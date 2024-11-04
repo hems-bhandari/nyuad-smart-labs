@@ -14,3 +14,10 @@ class Submission(models.Model):
 
     def __str__(self):
         return f"Submission by {self.employee.username} on {self.created_at}"
+
+class ModelOutput(models.Model):
+    topic = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Model Output on {self.created_at}"

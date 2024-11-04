@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Submission
+from .models import Submission, ModelOutput
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -21,3 +21,8 @@ class SubmissionSerializer(serializers.ModelSerializer):
         model = Submission
         fields = ['id', 'a1', 'a2', 'a3', 'a4', 'a5', 'created_at']
         read_only_fields = ['id', 'created_at', 'employee']
+
+class ModelOutputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ModelOutput
+        fields = ['id', 'topic', 'created_at']
