@@ -4,6 +4,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HMR_LOGO } from "@/constants";
 // import { ALEC_LOGO, SMART_LOGO } from "@/constants";
 import Summaries from "@/components/Summaries";
+import api from "@/api";
+
+interface TopicModelOutput {
+  topic_id: number;
+  name: string;
+  count: number;
+}
 
 export default function ManagerDashboard() {
   const responseRatesRef = useRef<HTMLCanvasElement | null>(null);
@@ -15,6 +22,7 @@ export default function ManagerDashboard() {
   const topicWordScoresChartRef = useRef<Chart | null>(null);
 
   const [activeTab, setActiveTab] = useState("analytics");
+  const [topics, setTopics] = useState<TopicModelOutput[]>([]);
 
   const initializeCharts = () => {
     // dummy data for Response Rates chart
@@ -127,6 +135,14 @@ export default function ManagerDashboard() {
     };
   }, [activeTab]);
 
+  useEffect(() => {
+    const fetchTopics = async () => {
+      const response = await api.get("/api/topic-model-output/");
+      setTopics(response.data);
+    };
+    fetchTopics();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-6xl mx-auto bg-white p-8 shadow-lg rounded">
@@ -182,6 +198,16 @@ export default function ManagerDashboard() {
               <h2 className="text-lg font-medium mb-2">Topic Word Scores</h2>
               <canvas ref={topicWordScoresRef} />
             </div>
+            <div className="mt-8">
+              <h2 className="text-lg font-medium mb-2">Topic Modeling Results</h2>
+              <ul>
+                {topics.map((topic) => (
+                  <li key={topic.topic_id}>
+                    Topic {topic.topic_id}: {topic.name} ({topic.count} documents)
+                  </li>
+                ))}
+              </ul>
+            </div>
           </TabsContent>
           <TabsContent value="summaries">
             <div className="flex justify-center mb-6">
@@ -195,4 +221,35 @@ export default function ManagerDashboard() {
       </div>
     </div>
   );
+}
+
+
+{
+  /* 
+  Detect New Submissions:
+  Where: In the Django models.py file.
+  What: Use Django's post_save signal on the Submission model to trigger a function whenever a new submission is created.
+  Purpose: This ensures that the subsequent steps occur automatically when the 21st submission is added.
+
+  Fetch Submissions and Export to Excel:
+  Where: In a utility module, e.g., utils.py.
+  What: Create a function process_submissions() that fetches all submissions from the database and exports them to an Excel file (Responses.xlsx).
+  Purpose: Provides the data in the required format for the topic modeling process.
+
+  Run the Topic Modeling Process:
+  Where: In a separate module, e.g., topic_modeling.py.
+  What: Refactor the Jupyter Notebook code into a Python function run_topic_modeling() that reads Responses.xlsx, processes the text, and runs BERTopic to generate topics.
+  Purpose: Analyzes the submissions to identify topics and insights.
+
+  Save Model Output to Database:
+  Where: Back in models.py, create a new model TopicModelOutput.
+  What: After generating topics, save them into the TopicModelOutput model within run_topic_modeling().
+  Purpose: Stores the results so they can be retrieved and displayed later.
+
+  Display Output on Manager's Dashboard:
+  Where: In the React component ManagerDashboard.tsx.
+  What: Modify the dashboard to fetch the topic data from a new API endpoint (e.g., /api/topic-model-output/) and display it using charts or lists.
+  Purpose: Allows the manager to see the results of the topic modeling in the dashboard.
+
+  */
 }
