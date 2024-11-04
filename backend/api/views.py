@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import EmployeeSerializer, SubmissionSerializer
+from .serializers import EmployeeSerializer, SubmissionSerializer, TopicModelOutputSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Submission
+from .models import Submission, TopicModelOutput
 
 class SubmissionListCreate(generics.ListCreateAPIView):
     serializer_class = SubmissionSerializer
@@ -40,3 +40,7 @@ class CreateEmployeeView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = EmployeeSerializer
     permission_classes = [AllowAny]
+
+class TopicModelOutputList(generics.ListAPIView):
+    queryset = TopicModelOutput.objects.all()
+    serializer_class = TopicModelOutputSerializer

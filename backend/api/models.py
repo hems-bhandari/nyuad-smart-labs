@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class Submission(models.Model):
@@ -14,3 +16,15 @@ class Submission(models.Model):
 
     def __str__(self):
         return f"Submission by {self.employee.username} on {self.created_at}"
+
+@receiver(post_save, sender=Submission)
+def handle_new_submission(sender, instance, created, **kwargs):
+    if created:
+        from .utils import process_submissions
+        process_submissions()
+
+class TopicModelOutput(models.Model):
+    topic_id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
+    count = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
