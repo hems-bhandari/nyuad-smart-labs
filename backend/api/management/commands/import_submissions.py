@@ -3,17 +3,17 @@ from django.core.management.base import BaseCommand
 from api.models import Submission
 from django.contrib.auth.models import User
 
-# to run the command: python manage.py import_submissions <path_to_excel_file>
+# to run the command: python manage.py import_submissions <path_to_csv_file>
 
 class Command(BaseCommand):
-    help = 'Import submissions from an Excel file'
+    help = 'Import submissions from a CSV file'
 
     def add_arguments(self, parser):
-        parser.add_argument('file_path', type=str, help='The path to the Excel file')
+        parser.add_argument('file_path', type=str, help='The path to the CSV file')
 
     def handle(self, *args, **kwargs):
         file_path = kwargs['file_path']
-        df = pd.read_excel(file_path)
+        df = pd.read_csv(file_path, encoding='ISO-8859-1')  # Specify encoding if needed
 
         for index, row in df.iterrows():
             a1 = row['response_qual_q1']

@@ -14,3 +14,10 @@ class Submission(models.Model):
 
     def __str__(self):
         return f"Submission by {self.employee.username} on {self.created_at}"
+
+class TopicSummary(models.Model):
+    topic_id = models.IntegerField()
+    keywords = models.TextField()
+    representative_documents = models.TextField()
+    label = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
